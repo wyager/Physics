@@ -10,3 +10,8 @@ Parts are as follows:
 * 1x 610-2N4401        (generic NPN transistor)
 * 1x 610-2N4403        (generic PNP transistor)
 * 1x 667-ECA-1HM330I   (50V smoothing cap)
+
+Errata:
+
+* The screw mounting holes were too thin and had to be filed out a bit.
+* Only one screw mount on each side could be used, as they are too close together.
