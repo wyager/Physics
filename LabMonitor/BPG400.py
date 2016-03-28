@@ -70,9 +70,18 @@ class BPG400(object):
         return BPG400_Measurement(status, error, hi, lo, ver)
 
 class BPG400_Measurement(object):
-    def __init__(self,status,error,hi,lo,ver):
+    """Has the following methods:
+    version() returns the version of the sensor.
+    mbar() returns pressure in mbar.
+    torr() returns pressure in torr.
+    pa() returns pressure in pascals.
+    status() returns a string representation of the sensor status
+    error() returns a string rep of the sensor's error state
+        or None if there is no error.
+    """
+    def __init__(self,status,err,hi,lo,ver):
         self.status = status
-        self.error = error
+        self.err = err & 240
         self.hi = hi
         self.lo = lo
         self.raw = float((hi * 256) + lo)
@@ -85,3 +94,24 @@ class BPG400_Measurement(object):
         return 10**(self.raw/4000 - 12.625)
     def pa():
         return 10**(self.raw/4000 - 10.5)
+    def status():
+        emission = {
+            0: "off",
+            1: "25uA",
+            2: "5mA",
+            3: "Degas"
+        }[self.status & 3]
+        adj = {0:"off", 1:"on"}[self.status & (1<<2)]
+        unit = {0:"mbar", 1:"torr", 2:"pa"}[self.status & 48]
+        return "Emission {}, 1000 mbar adjustment {}, on-screen adjustment {}"\
+            % (emission, adj, unit)
+    def error():
+        errors = {
+            (1 << 6) + (1 << 4) : "Pirani adjusted poorly",
+            (1 << 7)            : "BA error (What does BA stand for?)",
+            (1 << 7) + (1 << 4) : "Pirani error"
+        }
+        if self.err in errors:
+            return errors[self.err]
+        else:
+            return None
