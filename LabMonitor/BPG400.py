@@ -84,7 +84,7 @@ class BPG400_Measurement(object):
         or None if there is no error.
     """
     def __init__(self,status,err,hi,lo,ver):
-        self.status = status
+        self.stat = status
         self.err = err & 240
         self.hi = hi
         self.lo = lo
@@ -104,9 +104,9 @@ class BPG400_Measurement(object):
             1: "25uA",
             2: "5mA",
             3: "Degas"
-        }[self.status & 3]
-        adj = {0:"off", 1:"on"}[self.status & (1<<2)]
-        unit = {0:"mbar", 1:"torr", 2:"pa"}[self.status & 48]
+        }[self.stat & 3]
+        adj = {0:"off", 1:"on"}[self.stat & (1<<2)]
+        unit = {0:"mbar", 1:"torr", 2:"pa"}[self.stat & 48]
         return "Emission {}, 1000 mbar adjustment {}, on-screen adjustment {}"\
             % (emission, adj, unit)
     def error(self):
