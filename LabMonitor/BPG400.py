@@ -53,7 +53,7 @@ class BPG400(object):
     def read(self):
         """bpg400.read() Returns a BPG400_Measurement"""
         self.serial.reset_input_buffer()
-        self.serial.synchronize()
+        self.synchronize()
         packet = bytearray(self.serial.read(9))
         return parse_packet(packet)
 
