@@ -35,39 +35,43 @@ class BPG400(object):
         self.path = serialPortPath
         self.serial = serial.Serial(serialPortPath, 9600)
         self.synchronize()
-    def synchronize():
+    def synchronize(self):
         """bpg400.synchronize()
         Wait for a whole message to come through the serial line.
         """
         while True:
-            while ser.read() != 7: # Wait for start byte
+            while self.serial.read() != 7: # Wait for start byte
                 pass
-            if ser.read() != 5: # Page number
+            if self.serial.read() != 5: # Page number
                 continue # Try again
-            data = ser.read(5)
-            if ser.read() != 10: # Sensor type
+            data = self.serial.read(5)
+            if self.serial.read() != 10: # Sensor type
                 continue # Try again
-            checksum = ser.read()
+            checksum = self.serial.read()
             if checksum != (5 + sum(data) + 10) % 256:
                 raise Exception("Bad checksum during synchronize")
             return
-    def read():
+    def read(self):
         """bpg400.read() Returns a BPG400_Measurement"""
-        if ser.read() != 7:
-            raise Exception("Invalid length byte")
-        if ser.read() != 5:
-            raise Exception("Invalid page number")
-        status = ser.read()
-        error = ser.read()
-        hi = ser.read()
-        lo = ser.read()
-        ver = ser.read()
-        if ser.read() != 10:
-            raise Exception("Invalid sensor type")
-        checksum = ser.read()
-        if checksum != (5 + status + error + hi + lo + ver + 10) % 256:
-            raise Exception("Bad checksum")
-        return BPG400_Measurement(status, error, hi, lo, ver)
+        packet = bytearray(self.serial.read(9))
+        return parse_packet(packet)
+
+def parse_packet(packet):
+    if packet[0] != 7:
+        raise Exception("Invalid length byte")
+    if packet[1] != 5:
+        raise Exception("Invalid page number")
+    status = packet[2]
+    error = packet[3]
+    hi = packet[4]
+    lo = packet[5]
+    ver = packet[6]
+    if packet[7] != 10:
+        raise Exception("Invalid sensor type")
+    checksum = packet[8]
+    if checksum != sum(packet[1:8]) % 256:
+        raise Exception("Bad checksum")
+    return BPG400_Measurement(status, error, hi, lo, ver)
 
 class BPG400_Measurement(object):
     """Has the following methods:
@@ -86,15 +90,15 @@ class BPG400_Measurement(object):
         self.lo = lo
         self.raw = float((hi * 256) + lo)
         self.ver = ver
-    def version():
+    def version(self):
         return self.ver / 20.0
-    def mbar():
+    def mbar(self):
         return 10**(self.raw/4000 - 12.5)
-    def torr():
+    def torr(self):
         return 10**(self.raw/4000 - 12.625)
-    def pa():
+    def pa(self):
         return 10**(self.raw/4000 - 10.5)
-    def status():
+    def status(self):
         emission = {
             0: "off",
             1: "25uA",
@@ -105,7 +109,7 @@ class BPG400_Measurement(object):
         unit = {0:"mbar", 1:"torr", 2:"pa"}[self.status & 48]
         return "Emission {}, 1000 mbar adjustment {}, on-screen adjustment {}"\
             % (emission, adj, unit)
-    def error():
+    def error(self):
         errors = {
             (1 << 6) + (1 << 4) : "Pirani adjusted poorly",
             (1 << 7)            : "BA error (What does BA stand for?)",
