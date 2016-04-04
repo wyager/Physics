@@ -1,3 +1,4 @@
+#!env python3
 import BPG400
 import time
 
