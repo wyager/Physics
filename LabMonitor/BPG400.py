@@ -40,17 +40,10 @@ class BPG400(object):
         Wait for a whole message to come through the serial line.
         """
         while True:
-            while self.serial.read() != 7: # Wait for start byte
-                pass
-            if self.serial.read() != 5: # Page number
-                continue # Try again
-            data = self.serial.read(5)
-            if self.serial.read() != 10: # Sensor type
-                continue # Try again
-            checksum = self.serial.read()
-            if checksum != (5 + sum(data) + 10) % 256:
-                raise Exception("Bad checksum during synchronize")
-            return
+            try:
+                self.read()
+            except Exception, e:
+                continue
     def read(self):
         """bpg400.read() Returns a BPG400_Measurement"""
         packet = bytearray(self.serial.read(9))
