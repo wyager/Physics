@@ -107,7 +107,7 @@ class BPG400_Measurement(object):
         }[self.stat & 3]
         adj = {0:"off", 1:"on"}[self.stat & (1<<2)]
         unit = {0:"mbar", 1:"torr", 2:"pa"}[self.stat & 48]
-        return "Emission {}, 1000 mbar adjustment {}, on-screen adjustment {}"\
+        return "Emission {}, 1000 mbar adjustment {}, on-screen unit {}"\
             .format(emission, adj, unit)
     def error(self):
         errors = {
