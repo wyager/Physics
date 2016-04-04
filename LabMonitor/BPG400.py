@@ -34,7 +34,6 @@ class BPG400(object):
         """BPG400("/dev/correctSerialPort")"""
         self.path = serialPortPath
         self.serial = serial.Serial(serialPortPath, 9600)
-        self.synchronize()
     def synchronize(self):
         """bpg400.synchronize()
         Wait for a whole message to come through the serial line.
@@ -53,6 +52,8 @@ class BPG400(object):
             return
     def read(self):
         """bpg400.read() Returns a BPG400_Measurement"""
+        self.serial.reset_input_buffer()
+        self.serial.synchronize()
         packet = bytearray(self.serial.read(9))
         return parse_packet(packet)
 
