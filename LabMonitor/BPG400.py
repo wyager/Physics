@@ -40,14 +40,14 @@ class BPG400(object):
         Wait for a whole message to come through the serial line.
         """
         while True:
-            while self.serial.read() != b"\x07": # Wait for start byte
+            while ord(self.serial.read()) != 7: # Wait for start byte
                 pass
-            if self.serial.read() != b"\x05": # Page number
+            if ord(self.serial.read()) != 5: # Page number
                 continue # Try again
-            data = self.serial.read(5)
-            if self.serial.read() != b"\x0A": # Sensor type
+            data = bytearray(self.serial.read(5))
+            if ord(self.serial.read()) != 10: # Sensor type
                 continue # Try again
-            checksum = bytearray(self.serial.read())
+            checksum = ord(self.serial.read())
             if checksum != (5 + sum(data) + 10) % 256:
                 raise Exception("Bad checksum during synchronize")
             return
