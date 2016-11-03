@@ -1,0 +1,40 @@
+*Pick And Place List
+*Company=
+*Author=
+*eMail=
+*
+*Project=Switcher2
+*Date=21:50:45
+*CreatedBy=Fritzing 0.9.2b.11.19.8d2d5970658f0bed09c661c9ea9a515b5f40f44c
+*
+*
+*Coordinates in mm, always center of component
+*Origin 0/0=Lower left corner of PCB
+*Rotation in degree (0-360, math. pos.)
+*
+*No;Value;Package;X;Y;Rotation;Side;Name
+1;;SO16;17.8612;-11.816;90;Top;ADuM5230
+2;;;28.7578;-11.816;0;Bottom;Via3
+3;;;35.1077;-21.341;0;Bottom;Hole3
+4;;THT;3.3578;-12.451;180;Bottom;J1
+5;;;3.3578;-21.341;0;Bottom;Hole1
+6;1 μF;B 3528 [SMD, tantalum];10.9778;-8.41105;90;Top;10V
+7;1 μF;B 3528 [SMD, tantalum];10.9778;-15.2209;-90;Top;10V
+8;;SOT-23 [SMD];30.9328;-9.90845;-90;Bottom;NPN
+9;;SOT-23 [SMD];37.6003;-9.90845;-90;Bottom;PNP
+10;;;5.85582;-12.1706;0;Bottom;TXT1
+11;;;34.1552;-9.91105;0;Bottom;Via2
+12;;THT;48.7603;-16.261;0;Bottom;Vout
+13;;;19.7351;-1.80895;0;Bottom;TXT3
+14;;;19.9253;-3.30534;0;Bottom;TXT3
+15;;;35.1077;-3.56107;0;Bottom;Hole4
+16;;;14.8105;-20.921;0;Bottom;TXT2
+17;1 μF;B 3528 [SMD, tantalum];26.2178;-10.316;90;Top;20V
+18;5k;2010 [SMD];28.1454;-16.261;0;Top;5k
+19;;;19.4287;-22.8865;0;Bottom;TXT2
+20;;;31.9328;-13.721;0;Bottom;Via4
+21;;;3.3578;-3.56107;0;Bottom;Hole2
+22;;to220v;43.185;-11.4984;-90;Bottom;N-MOSFET
+23;;;6.44126;-14.9063;0;Bottom;TXT1
+24;;THT;48.7603;-7.37095;0;Bottom;Vin
+25;;;6.44126;-9.65687;0;Bottom;TXT1
